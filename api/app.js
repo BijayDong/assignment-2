@@ -1,15 +1,32 @@
 const express = require("express");
 const cors = require("cors");
-
+const db = require("./models");
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:3000"
+  origin: "http://localhost:3000",
 };
 
-const db = require("./models");
-db.sequelize.sync({ force: false }).then(() => {
-    console.log("Drop and re-sync db.");
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+  const Contact = db.contacts;
+  const Phone = db.phones;
+  Contact.create({
+    name: "John Doe",
+  }).then((contact) => {
+    Phone.create({
+      phoneNumber: "045676789765",
+      contactId: contact.id,
+    });
+  });
+  Contact.create({
+    name: "Bijay",
+  }).then((contact) => {
+    Phone.create({
+      phoneNumber: "233344455",
+      contactId: contact.id,
+    });
+  });
 });
 
 app.use(cors(corsOptions));
