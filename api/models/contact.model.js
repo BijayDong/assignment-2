@@ -1,5 +1,3 @@
-const db = require("../models");
-const Contact = db.contacts;
 module.exports = (sequelize, Sequelize) => {
   const Contact = sequelize.define("contact", {
     id: {

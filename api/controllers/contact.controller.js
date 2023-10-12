@@ -5,6 +5,7 @@ const Op = db.Sequelize.Op;
 
 // Create contact
 exports.create = (req, res) => {
+  console.log("Create endpoint hit", req.body);
   // validate request
   if (!req.body.name) {
     res.status(400).send({
@@ -65,6 +66,12 @@ exports.findOne = (req, res) => {
 
 // Update one contact by id
 exports.update = (req, res) => {
+  console.log(
+    "Update endpoint hit for ID: ",
+    req.params.id,
+    "with body",
+    req.body
+  );
   const id = req.params.id;
 
   Contacts.update(req.body, {
