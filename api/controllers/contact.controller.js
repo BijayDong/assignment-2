@@ -99,13 +99,21 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.contactId;
 
-  Contacts.destroy({
-    where: { id: id },
+  // Step 1: Delete all associated phone numbers for the contact
+  Phones.destroy({
+    where: { contactId: id },
   })
+    .then(() => {
+      // Step 2: Delete the contact itself
+      return Contacts.destroy({
+        where: { id: id },
+      });
+    })
     .then((num) => {
-      if (num == 1) {
+      if (num === 1) {
         res.send({
-          message: "Contact was deleted successfully!",
+          message:
+            "Contact and associated phone numbers were deleted successfully!",
         });
       } else {
         res.send({
