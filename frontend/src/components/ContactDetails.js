@@ -3,19 +3,20 @@ import "./ContactDetails.css"; // assuming you've created a CSS file
 
 function ContactDetails({
   contact,
-  contactDetails,
+  contactDetails = [], // Default value set here
   handleUpdateContactDetails,
 }) {
-  const [contactType, setContactType] = useState("Mobile");
+  const [contactType, setContactType] = useState(""); // initial value is an empty string
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleAddDetail = () => {
-    if (phoneNumber) {
+    if (phoneNumber && contactType) {
       const newDetails = [
         ...contactDetails,
         { type: contactType, number: phoneNumber },
       ];
       handleUpdateContactDetails(contact, newDetails);
+      setContactType("");
       setPhoneNumber("");
     }
   };
@@ -23,17 +24,16 @@ function ContactDetails({
   return (
     <div>
       <div className="contact-row">
-        <select
-          className="contact-field"
-          value={contactType}
-          onChange={(e) => setContactType(e.target.value)}
-        >
-          <option value="Mobile">Mobile</option>
-          <option value="Office">Office</option>
-        </select>
-
         <input
           type="text"
+          className="contact-field"
+          placeholder="Name"
+          value={contactType}
+          onChange={(e) => setContactType(e.target.value)}
+        />
+
+        <input
+          type="Number"
           className="contact-field"
           placeholder="Number"
           value={phoneNumber}
