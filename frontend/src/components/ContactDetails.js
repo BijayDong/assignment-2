@@ -1,21 +1,42 @@
 import React, { useState } from "react";
-import "./ContactDetails.css"; // assuming you've created a CSS file
+import "./ContactDetails.css";
 
 function ContactDetails({
-  contact,
-  contactDetails = [], // Default value set here
+  contactId,
+  contactName,
+  contactDetails = [],
   handleUpdateContactDetails,
 }) {
-  const [contactType, setContactType] = useState(""); // initial value is an empty string
+  const [contactType, setContactType] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const handleAddDetail = () => {
+  const handleAddDetail = async () => {
     if (phoneNumber && contactType) {
-      const newDetails = [
-        ...contactDetails,
-        { type: contactType, number: phoneNumber },
-      ];
-      handleUpdateContactDetails(contact, newDetails);
+      try {
+        const response = await fetch(`/api/contacts/${contactId}/phones`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phoneNumber: phoneNumber,
+          }),
+        });
+
+        if (response.ok) {
+          const newDetails = [
+            ...contactDetails,
+            { type: contactType, number: phoneNumber },
+          ];
+          handleUpdateContactDetails(contactName, newDetails);
+        } else {
+          const data = await response.json();
+          console.error("Failed to add phone number:", data.message);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+
       setContactType("");
       setPhoneNumber("");
     }
@@ -31,15 +52,18 @@ function ContactDetails({
           value={contactType}
           onChange={(e) => setContactType(e.target.value)}
         />
-
         <input
-          type="Number"
+          type="text"
           className="contact-field"
           placeholder="Number"
           value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e) => {
+            // This regex ensures only numbers are input
+            if (/^[0-9]*$/.test(e.target.value)) {
+              setPhoneNumber(e.target.value);
+            }
+          }}
         />
-
         <button onClick={handleAddDetail}>Add</button>
       </div>
 

@@ -15,10 +15,9 @@ function ContactList({
       {contacts.map((contact, index) => (
         <div key={index}>
           <div className="contact-item">
-            {/* Update the onClick for the contact-name-btn */}
             <button
               className="contact-name-btn"
-              onClick={() => setSelectedContact(contact.name)}
+              onClick={() => setSelectedContact(contact.id)}
             >
               {contact.name}
             </button>
@@ -27,9 +26,10 @@ function ContactList({
             </button>
           </div>
           {/* Conditionally render ContactDetails based on selectedContact */}
-          {selectedContact === contact.name && (
+          {selectedContact === contact.id && (
             <ContactDetails
-              contact={contact.name}
+              contactId={contact.id}
+              contactName={contact.name}
               contactDetails={contact.details}
               handleUpdateContactDetails={handleUpdateContactDetails}
             />
