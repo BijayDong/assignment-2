@@ -21,7 +21,9 @@ function ContactList({
             >
               {contact.name}
             </button>
-            <button onClick={() => handleDeleteContact(contact.name)}>
+            <button
+              onClick={() => handleDeleteContact(contact.id, contact.name)}
+            >
               Delete
             </button>
           </div>

@@ -51,8 +51,21 @@ function App() {
     }
   };
 
-  const handleDeleteContact = (contactName) => {
-    setContacts(contacts.filter((contact) => contact.name !== contactName));
+  const handleDeleteContact = async (contactId, contactName) => {
+    try {
+      const response = await fetch(`/api/contacts/${contactId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setContacts(contacts.filter((contact) => contact.name !== contactName));
+      } else {
+        const data = await response.json();
+        console.error("Failed to delete contact:", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const handleUpdateContactDetails = (contactName, newDetails) => {
