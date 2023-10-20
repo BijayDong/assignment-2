@@ -7,27 +7,7 @@ var corsOptions = {
   origin: "http://localhost:3000",
 };
 
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and re-sync db.");
-  const Contact = db.contacts;
-  const Phone = db.phones;
-  Contact.create({
-    name: "John Doe",
-  }).then((contact) => {
-    Phone.create({
-      phoneNumber: "045676789765",
-      contactId: contact.id,
-    });
-  });
-  Contact.create({
-    name: "Bijay",
-  }).then((contact) => {
-    Phone.create({
-      phoneNumber: "233344455",
-      contactId: contact.id,
-    });
-  });
-});
+db.sequelize.sync({ force: true }).then(() => {});
 
 app.use(cors(corsOptions));
 
